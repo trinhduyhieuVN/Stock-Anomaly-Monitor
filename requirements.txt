@@ -1,0 +1,12 @@
+# Direct dependencies. Tested versions are recorded in requirements-lock.txt.
+# Install torch separately from the official CPU wheel index (see README).
+pandas
+numpy
+pyarrow
+scikit-learn
+joblib
+torch
+streamlit
+plotly
+PyYAML
+pytest

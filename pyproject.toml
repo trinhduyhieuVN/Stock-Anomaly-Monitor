@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stock-anomaly-monitor"
+version = "0.1.0"
+description = "Stock OHLCV validation and causal feature/window preparation"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = ["pandas", "numpy", "pyarrow", "PyYAML", "scikit-learn", "joblib"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

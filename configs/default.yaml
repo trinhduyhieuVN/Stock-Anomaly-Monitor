@@ -1,0 +1,101 @@
+schema_version: 1
+project:
+  root: ..  # Relative to this YAML file, never to the terminal's working directory.
+  title: "Xây dựng ứng dụng hỗ trợ phát hiện bất thường giá và khối lượng cổ phiếu trong phiên bằng LSTM Autoencoder"
+  language: vi
+  mode: historical_replay
+data:
+  source: VCI
+  symbols: [FPT, HPG, VCB]
+  interval: 5m
+  source_interval: 1m
+  start: '2026-04-01'
+  end: '2026-10-01'
+  display_timezone: Asia/Ho_Chi_Minh
+  timestamp_timezone: UTC
+  timestamp_convention: bar_end
+  price_unit: VND
+  volume_unit: shares
+  probe_manifest: reports/vci_probe_manifest.json
+  raw_dir: data/raw
+  processed_dir: data/processed
+  report_dir: reports
+  http:
+    max_attempts: 3
+    backoff_seconds: 1
+    max_wait_seconds: 10
+    timeout: 30
+    count_back: 33916
+  diagnostic_profile:
+    calendar_file: configs/observed_calendar.json
+    evidence:
+      interpretation: reports/data_feasibility_vci.md
+      implementation: reports/probe_source_snapshot/vci_manifest.json
+      limitations: "Raw-minute audit only. No unit conversion, source label shift, 5m aggregation or verified segment assignment. Every output minute remains unverified."
+  confirmations:
+    source_bar_label:
+      status: pending
+      value: null
+      evidence: null
+      note: "Probe supports left labels; independent source specification still missing."
+    source_price_unit:
+      status: pending
+      value: null
+      evidence: null
+      note: "Adapter interprets raw as VND and divides by 1000; provider specification pending."
+    source_volume_unit:
+      status: pending
+      value: null
+      evidence: null
+      note: "Per-minute volume corroborated; shares versus lots still pending."
+    price_adjustment:
+      status: pending
+      value: null
+      evidence: null
+      note: "No verified adjusted/unadjusted or revision policy."
+    data_usage:
+      status: pending
+      value: null
+      evidence: null
+      note: "Local probe performed; research/use and redistribution rights are not verified."
+    session_calendar:
+      status: pending
+      value: null
+      evidence: null
+      note: "Reference intraday hours observed; source calendar/auction treatment needs confirmation."
+  quality_policy:
+    auctions: exclude
+    incomplete_minutes: reject_and_break_segment
+    volume_mismatch: reject_and_break_segment
+    missing_bars: do_not_fill
+    exact_duplicates: deduplicate_with_log
+    conflicting_duplicates: reject_conflicting_key
+    normalize_before_confirmations: false
+  reference_sessions:
+    status: provisional
+    morning: ['09:15', '11:30']
+    afternoon: ['13:00', '14:30']
+    note: "Half-open reference ranges; not an approved source calendar."
+features:
+  order: [log_return, range_ratio, body_ratio, volume_surprise]
+  volume_history_sessions: 20
+  volume_min_history_sessions: 10
+  warmup_sessions: 20
+  window_length: 6
+split:
+  by: common_trading_date
+  train: 0.6
+  validation: 0.2
+  test: 0.2
+model:
+  architecture: lstm_autoencoder
+  hidden_size: 32
+  latent_size: 8
+  num_layers: 1
+  batch_size: 64
+  max_epochs: 50
+  learning_rate: 0.001
+  patience: 5
+  seed: 42
+  threshold_quantile: 0.98
+  device: cpu

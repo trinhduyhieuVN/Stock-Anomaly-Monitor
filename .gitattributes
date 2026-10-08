@@ -1,0 +1,2 @@
+# Keep manifest-pinned fixture and runner bytes stable on Windows clones.
+* text eol=lf

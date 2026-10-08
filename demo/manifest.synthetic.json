@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "bundle_kind": "synthetic_demo",
+  "demo_id": "prompt12_synthetic_ohlcv_v1",
+  "data_policy": {
+    "classification": "synthetic_generated",
+    "distributable": true,
+    "contains_real_source_data": false,
+    "license": "CC0-1.0",
+    "note": "All values were authored for this demo. They are not observations, predictions, labels, or transformations of market data."
+  },
+  "fixture": {
+    "row_count": 18,
+    "symbols": ["FPT", "HPG", "VCB"],
+    "case_counts": {
+      "baseline": 15,
+      "seeded_event": 3
+    },
+    "generation": "Six deterministic 5-minute OHLCV bars per fictionalized symbol path; the last bar is a visibly seeded synthetic event."
+  },
+  "files": [
+    {
+      "role": "runner",
+      "path": "scripts/run_synthetic_demo.py",
+      "sha256": "e9b8b7c5c10a77a9bacd1cf7fd4168743df8edfec520710ab5521aa64bd16ee1"
+    },
+    {
+      "role": "synthetic_fixture",
+      "path": "demo/synthetic_ohlcv.csv",
+      "sha256": "3bc811e2193826792ba576f4a2e79268acd73c1694c13e25fdd4ab23b8802ac6"
+    }
+  ]
+}

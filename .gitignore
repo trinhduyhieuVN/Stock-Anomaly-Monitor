@@ -1,0 +1,17 @@
+.venv*/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.env
+.env.*
+.streamlit/secrets.toml
+data/
+artifacts/
+reports/
+configs/observed_calendar.json
+configs/research.yaml
+.autopilot/
+AUTOPILOT_*.json
+build/
+dist/
