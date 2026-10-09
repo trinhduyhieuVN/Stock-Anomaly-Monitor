@@ -1,0 +1,58 @@
+schema_version: 2
+scope: reduced_bar_research
+event_unit: bar_5m
+interval_minutes: 5
+timestamp_timezone: UTC
+timestamp_convention: bar_end
+display_timezone: Asia/Ho_Chi_Minh
+symbols: [FPT, HPG, VCB]
+source_modes: [SYNTHETIC, HISTORICAL_REPLAY, SAVED_TRIAL]
+context:
+  information_boundary: strictly_before_current_bar
+  minimum_reference_samples: 100
+  volatility_lookback_bars: 6
+  fallback_order: [context, symbol, global, unavailable]
+  quantile: 0.98
+segment:
+  lengths: [3, 6, 12]
+  calibration: maximum_across_lengths_on_validation
+  selection: heuristic
+forecast:
+  horizons: [1, 3]
+  models: [zero_return, ridge_optional]
+  cross_session: censored
+  cross_gap: censored
+evaluation:
+  development_data: existing_train_and_validation
+  existing_test: exposed_exploratory_only
+  new_real_holdout: unavailable
+  expert_labels: unavailable
+  segment_iou: 0.3
+  segment_iou_sensitivity: 0.5
+  segment_matching: one_to_one
+  delayed_metrics: separate_from_initial
+  false_positive_rate: requires_reviewed_coverage
+synthetic:
+  symbols: [FPT, HPG, VCB]
+  sessions: 30
+  warmup_sessions: 20
+  development_seeds: [11, 12]
+  calibration_seeds: [21, 22]
+  holdout_seeds: [31, 32]
+  scenarios: [normal, isolated_spike, mild_shift_3, mild_shift_6, mild_shift_12,
+              session_volume, news_context, gap, revision, delayed_outcome, censored]
+budget:
+  provider_requests: 0
+  paid_services: false
+  new_deep_models: false
+  maximum_configurations: 4
+  capa_timebox_minutes: 120
+storage:
+  backend: sqlite_stdlib
+  event_versions: append_only
+  path: artifacts/upgrade_v2/events.sqlite
+source_policy:
+  real_rights_status: pending
+  real_distributable: false
+  tick_data_available: false
+  book_data_available: false

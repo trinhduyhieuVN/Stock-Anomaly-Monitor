@@ -1,12 +1,40 @@
 # Stock Anomaly Monitor
 
-Ứng dụng nghiên cứu phát hiện bất thường giá/khối lượng cổ phiếu bằng Robust z-score, Isolation Forest và LSTM Autoencoder. Giao diện Streamlit tiếng Việt có biểu đồ, giải thích lỗi tái tạo, xuất CSV và replay nhân quả.
+Ứng dụng rà soát bất thường giá và khối lượng cổ phiếu. Demo v2 có nến OHLC 5 phút, volume, cảnh báo điểm/đoạn, replay, forecast, ghi chú rà soát và xuất CSV. Mã nguồn nghiên cứu v1 với Robust z-score, Isolation Forest và LSTM Autoencoder vẫn được giữ trong repo.
+
+## Chạy dashboard demo v2
+
+Cần Python 3.12 trên Windows. Mở PowerShell:
+
+```powershell
+git clone https://github.com/trinhduyhieuVN/Stock-Anomaly-Monitor.git
+cd Stock-Anomaly-Monitor
+py -3.12 -m venv .venv
+.venv/Scripts/python.exe -m pip install -r requirements-lock.txt --extra-index-url https://download.pytorch.org/whl/cpu
+.venv/Scripts/python.exe -m pip install -e . --no-build-isolation --no-deps
+.venv/Scripts/python.exe -m scripts.check_upgrade_demo
+.venv/Scripts/python.exe -m scripts.run_upgrade_demo_local
+```
+
+Mở http://127.0.0.1:8502. Demo mặc định hiển thị toàn phiên; chọn **Replay tại T**
+để xem từng bước. Nếu đang ở nến đầu, bấm **Xem toàn phiên**. Ô thiếu có dấu **—**
+và lý do cụ thể. Bản demo dùng dữ liệu tổng hợp, không phải giá thị trường thật.
+
+Launcher tự dừng sau 45 phút. Có thể dùng `--minutes 10` hoặc `--port 8503` khi
+cổng mặc định đang bận. Muốn chạy không giới hạn thời gian:
+
+```powershell
+.venv/Scripts/python.exe -m streamlit run app_upgrade.py --server.address=127.0.0.1 --server.port=8502 --browser.gatherUsageStats=false
+```
+
+Xem [hướng dẫn demo](docs/upgrade/demo_local_hoan_thien.md) và
+[kết quả, giới hạn](docs/upgrade/results_v2.md).
 
 ## Phạm vi bản public
 
 Repository này là **bản xuất mã nguồn**, không phải bản sao dữ liệu nghiên cứu trên máy tác giả. Không chứa raw thị trường, dataset thực, observed calendar, model/scaler/threshold đã huấn luyện, báo cáo phiên, thông tin đăng nhập hoặc bộ điều phối cá nhân.
 
-Fixture `demo/synthetic_ohlcv.csv` gồm 18 nến được tạo tổng hợp, không phải giá thật hoặc dự báo. Manifest công bố fixture theo CC0-1.0. Không suy ra quyền dữ liệu thị trường hoặc giấy phép mã nguồn từ giấy phép fixture; repository chưa cấp một giấy phép mã nguồn riêng.
+`demo/upgrade_ui/` chứa dữ liệu và calibration tổng hợp đã ghim hash để chạy dashboard v2 độc lập. Fixture nhỏ `demo/synthetic_ohlcv.csv` gồm 18 nến vẫn có thể kiểm bằng thư viện chuẩn Python. Giấy phép fixture không cấp quyền đối với dữ liệu thị trường hoặc mã nguồn; repository chưa thêm giấy phép mã nguồn riêng.
 
 ## Chạy demo tổng hợp ngay (Python 3.12)
 
@@ -22,9 +50,8 @@ Lệnh chỉ dùng thư viện chuẩn Python: kiểm SHA256/schema/OHLCV và in
 ## Cài môi trường cho mã nguồn và tests
 
 ```powershell
-.venv/Scripts/python.exe -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-.venv/Scripts/python.exe -m pip install -r requirements.txt
-.venv/Scripts/python.exe -m pip install -e .
+.venv/Scripts/python.exe -m pip install -r requirements-lock.txt --extra-index-url https://download.pytorch.org/whl/cpu
+.venv/Scripts/python.exe -m pip install -e . --no-build-isolation --no-deps
 .venv/Scripts/python.exe -m pytest -q
 ```
 
@@ -56,10 +83,12 @@ Ngưỡng 98% **không phải độ chính xác 98%**. Cảnh báo không phải
 
 ```text
 app.py                 Giao diện Streamlit
+app_upgrade.py         Dashboard demo v2 với dữ liệu tổng hợp đi kèm
 src/stock_monitor/     Dữ liệu, feature, model, scoring, replay, realtime guards
 tests/                 Nhóm tests độc lập của bản public
 scripts/               Kiểm tra fixture và manifest
 demo/                  Fixture tổng hợp + manifest phân phối
+demo/upgrade_ui/        Dữ liệu và calibration cho dashboard v2
 configs/default.yaml   Cấu hình strict mẫu, không có chứng nhận nguồn
 ```
 

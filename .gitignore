@@ -1,4 +1,7 @@
 .venv*/
+.local/
+handoff/
+.qa/
 __pycache__/
 *.py[cod]
 *.egg-info/
