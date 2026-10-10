@@ -17,8 +17,8 @@
     },
     {
       "path": "DESIGN.md",
-      "sha256": "318210dd500916ec4f3190917eb2bb5ae7d1586f2848a5d88539d8a4bc434312",
-      "bytes": 3172
+      "sha256": "c86211a60a1e335fbdb89e3846662f60164cecc297804acfe954395c6ae024db",
+      "bytes": 9037
     },
     {
       "path": "PRODUCT.md",
@@ -246,6 +246,51 @@
       "bytes": 1636
     },
     {
+      "path": "src/stock_monitor/research/__init__.py",
+      "sha256": "6b35bd93c7f2a0ac0890e19d56faafb783f318296cb137f6cb4649db1394ab27",
+      "bytes": 81
+    },
+    {
+      "path": "src/stock_monitor/research/analysis.py",
+      "sha256": "4788d994fe1ef36a1f0d30ab3d8003f9d1b2ca63548e77384920efd5e4f5e79d",
+      "bytes": 8751
+    },
+    {
+      "path": "src/stock_monitor/research/analysis_ui.py",
+      "sha256": "369713e4d60229d190a9d48be94c8e054cbb20860fc901c5cbcaf0b15cf04f21",
+      "bytes": 3181
+    },
+    {
+      "path": "src/stock_monitor/research/history.py",
+      "sha256": "6ae866dd4f6cf7d53089e0d65a3f50884e8da6188c4aadc1ad7b37a0c30c7ca5",
+      "bytes": 11711
+    },
+    {
+      "path": "src/stock_monitor/research/history_review.py",
+      "sha256": "67f558f69b94a55ed6794900fe081e5404c59f4b9453d689f26b6f35c05e8f9a",
+      "bytes": 2849
+    },
+    {
+      "path": "src/stock_monitor/research/history_ui.py",
+      "sha256": "c8174d1e42cf1e817bd41338bbe187090c2c8288722b52a24f9f35d8bd73039d",
+      "bytes": 16825
+    },
+    {
+      "path": "src/stock_monitor/research/navigation.py",
+      "sha256": "8335230384f3ad70172cbaf80787dbe38999f0b235052b273b40b2c21fb240d9",
+      "bytes": 6255
+    },
+    {
+      "path": "src/stock_monitor/research/presentation.py",
+      "sha256": "97894331412026c93950b9905d4e7032ed04a9efacb5d8e9fd59bf1e8c1927f5",
+      "bytes": 5357
+    },
+    {
+      "path": "src/stock_monitor/research/theme.py",
+      "sha256": "7471010ac4673a53f3f936828ab77f822a6b5fad8072e408dc487c57ca8b3c87",
+      "bytes": 1352
+    },
+    {
       "path": "src/stock_monitor/scoring.py",
       "sha256": "28efa5aedd70912ec997f5181bb12b368bc2fc65f0be047cfbb18c90c19cfb7f",
       "bytes": 2929
@@ -354,6 +399,31 @@
       "path": "src/stock_monitor/windows.py",
       "sha256": "ac1d776b2992d9db37217bfabb4a82a7135276f4036384f437daaed272945a1c",
       "bytes": 6839
+    },
+    {
+      "path": "src/stock_monitor/workbench/__init__.py",
+      "sha256": "71d95b67d2c53724345ddb21ed83d6489021560a73fb612d6614e7f62e3ed4d9",
+      "bytes": 65
+    },
+    {
+      "path": "src/stock_monitor/workbench/classic.py",
+      "sha256": "4574d9f42718d4a89e554667007076508d13e660d34aff5a6a9851eefb13f83e",
+      "bytes": 1012
+    },
+    {
+      "path": "src/stock_monitor/workbench/http.py",
+      "sha256": "6c3fc7c71d2ea93b3deba80abb6090b23005c191af4554eb6bbea795a5d1a491",
+      "bytes": 5474
+    },
+    {
+      "path": "src/stock_monitor/workbench/service.py",
+      "sha256": "42e3670487aac6ad4e5e8b5eedcfdb6dc00f73429b2f3998bb6820db7d1cf1b7",
+      "bytes": 12341
+    },
+    {
+      "path": "src/stock_monitor/workbench/smooth.py",
+      "sha256": "a24fe35102a8ebb738f3cc7e83b5825f60d05c6f354a11a23c1980aaa1dbdae5",
+      "bytes": 5348
     },
     {
       "path": "tests/test_atomic_access.py",
