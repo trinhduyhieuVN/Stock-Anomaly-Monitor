@@ -3,6 +3,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from stock_monitor.io import DataContractError
 from stock_monitor.research.history import historical_session
+from stock_monitor.research.ai_demo import AI_MODELS, AI_SHA
 from stock_monitor.upgrade.synthetic import bars_as_of
 from stock_monitor.upgrade.contracts import utc_time
 from stock_monitor.workbench.service import Workbench, clean
@@ -14,12 +15,14 @@ class SmoothWorkbench(Workbench):
         with self.lock:
             bundle = self._scope(source, symbol, session, model)
             if source == 'historical':
-                history = historical_session(bundle, symbol=symbol, session_id=session, model=model)
+                history = historical_session(bundle, symbol=symbol, session_id=session, model='lstm' if model in AI_MODELS.values() else model)
                 bars = clean(history['bars'])
                 frames = [{'step': i + 1, 'as_of': b['timestamp'], 'bars': bars[:i + 1]}
                           for i, b in enumerate(bars)]
                 policy = history['data_policy']
                 provenance = history['provenance']
+                if model in AI_MODELS.values():
+                    provenance = {**provenance, 'model_run': 'ai_outline:' + model, 'ai_manifest_sha256': AI_SHA}
                 basis = history['availability_basis']
             else:
                 rows = [r for r in bundle['rows'] if r['symbol'] == symbol and r['session_id'] == session]

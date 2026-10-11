@@ -1,10 +1,10 @@
-# Stock Anomaly Monitor
+# Stock Monitor
 
-Ứng dụng rà soát bất thường giá và khối lượng cổ phiếu. Demo v2 có nến OHLC 5 phút, volume, cảnh báo điểm/đoạn, replay, forecast, ghi chú rà soát và xuất CSV. Mã nguồn nghiên cứu v1 với Robust z-score, Isolation Forest và LSTM Autoencoder vẫn được giữ trong repo.
+Ứng dụng nghiên cứu những biến động khác thường của giá và khối lượng cổ phiếu trên nến 5 phút. Chọn mã, phát lại phiên giao dịch, xem tín hiệu và ghi nhận xét ngay trên biểu đồ.
 
-## Chạy dashboard demo v2
+## Chạy demo
 
-Cần Python 3.12 trên Windows. Mở PowerShell:
+Cần Windows x64 và Python 3.12. Mở PowerShell:
 
 ```powershell
 git clone https://github.com/trinhduyhieuVN/Stock-Anomaly-Monitor.git
@@ -12,84 +12,34 @@ cd Stock-Anomaly-Monitor
 py -3.12 -m venv .venv
 .venv/Scripts/python.exe -m pip install -r requirements-lock.txt --extra-index-url https://download.pytorch.org/whl/cpu
 .venv/Scripts/python.exe -m pip install -e . --no-build-isolation --no-deps
-.venv/Scripts/python.exe -m scripts.check_upgrade_demo
-.venv/Scripts/python.exe -m scripts.run_upgrade_demo_local
+.venv/Scripts/python.exe -m scripts.run_demo
 ```
 
-Mở http://127.0.0.1:8502. Demo mặc định hiển thị toàn phiên; chọn **Replay tại T**
-để xem từng bước. Nếu đang ở nến đầu, bấm **Xem toàn phiên**. Ô thiếu có dấu **—**
-và lý do cụ thể. Bản demo dùng dữ liệu tổng hợp, không phải giá thị trường thật.
+Mở **http://127.0.0.1:8515**. Những lần sau chỉ cần chạy lệnh cuối. Demo tự dừng sau 60 phút; `Ctrl+C` để dừng sớm, hoặc thêm `--port 8516` nếu cổng đang bận.
 
-Launcher tự dừng sau 45 phút. Có thể dùng `--minutes 10` hoặc `--port 8503` khi
-cổng mặc định đang bận. Muốn chạy không giới hạn thời gian:
+Bản trên GitHub chạy bằng dữ liệu giả lập đi kèm. Không cần tài khoản hay API dữ liệu. Dữ liệu thị trường và model đã huấn luyện không nằm trong repo.
 
-```powershell
-.venv/Scripts/python.exe -m streamlit run app_upgrade.py --server.address=127.0.0.1 --server.port=8502 --browser.gatherUsageStats=false
-```
+## Có gì trong ứng dụng?
 
-Xem [hướng dẫn demo](docs/upgrade/demo_local_hoan_thien.md) và
-[kết quả, giới hạn](docs/upgrade/results_v2.md).
+- Biểu đồ nến và khối lượng của FPT, HPG, VCB.
+- Replay mượt: phát, tạm dừng, bước từng nến hoặc kéo thời điểm xem.
+- Tách biến động theo quy tắc khỏi tín hiệu mô hình; xem chi tiết, ghi nhận xét và xuất CSV.
+- Khi có bộ dữ liệu/model local hợp lệ: so sánh Robust z-score, Isolation Forest, LSTM Autoencoder và mô hình GRU học bối cảnh trước nến hiện tại.
 
-## Phạm vi bản public
+## AI hoạt động thế nào?
 
-Repository này là **bản xuất mã nguồn**, không phải bản sao dữ liệu nghiên cứu trên máy tác giả. Không chứa raw thị trường, dataset thực, observed calendar, model/scaler/threshold đã huấn luyện, báo cáo phiên, thông tin đăng nhập hoặc bộ điều phối cá nhân.
+Nến → đặc trưng giá/khối lượng → model đã huấn luyện → mức bất thường → tín hiệu để rà soát.
 
-`demo/upgrade_ui/` chứa dữ liệu và calibration tổng hợp đã ghim hash để chạy dashboard v2 độc lập. Fixture nhỏ `demo/synthetic_ohlcv.csv` gồm 18 nến vẫn có thể kiểm bằng thư viện chuẩn Python. Giấy phép fixture không cấp quyền đối với dữ liệu thị trường hoặc mã nguồn; repository chưa thêm giấy phép mã nguồn riêng.
+LSTM tìm mẫu khó tái tạo. GRU học phân bố có điều kiện từ 12 nến trước; bộ chọn tiếp theo phân biệt biến động đơn lẻ và đoạn nhiều nến. Model, scaler và ngưỡng giữ nguyên khi replay. Phần dự báo ngắn hạn hiện dùng baseline giá không đổi vì Ridge chưa vượt baseline trên validation.
 
-## Chạy demo tổng hợp ngay (Python 3.12)
+Đây là demo nghiên cứu, chưa có đánh giá độc lập với nhãn chuyên gia cho mô hình mới. Cảnh báo không phải kết luận thao túng hoặc lệnh mua/bán; replay không phải dữ liệu trực tiếp.
 
-```powershell
-git clone https://github.com/trinhduyhieuVN/Stock-Anomaly-Monitor.git
-cd Stock-Anomaly-Monitor
-py -3.12 -m venv .venv
-.venv/Scripts/python.exe -m scripts.run_synthetic_demo
-```
+[Hướng dẫn demo](docs/huong_dan_demo_local.md) · [Báo cáo ngắn](docs/bao_cao_du_an.md)
 
-Lệnh chỉ dùng thư viện chuẩn Python: kiểm SHA256/schema/OHLCV và in thống kê fixture. **Đây không phải demo suy luận của model đã huấn luyện và không mở dashboard.**
-
-## Cài môi trường cho mã nguồn và tests
+## Kiểm thử
 
 ```powershell
-.venv/Scripts/python.exe -m pip install -r requirements-lock.txt --extra-index-url https://download.pytorch.org/whl/cpu
-.venv/Scripts/python.exe -m pip install -e . --no-build-isolation --no-deps
 .venv/Scripts/python.exe -m pytest -q
 ```
 
-`requirements-lock.txt` ghi phiên bản của môi trường Windows nghiên cứu gốc để đối chiếu; khả năng cài còn phụ thuộc hệ điều hành/index đang dùng. Bản public chỉ gồm nhóm tests độc lập dùng fixture tổng hợp; không chứa toàn bộ audit phụ thuộc dữ liệu local. Không có test tự gọi provider thật trong nhóm xuất này.
-
-## Dashboard đầy đủ
-
-`app.py` chứa giao diện nghiên cứu. Để chạy đầy đủ cần tự cung cấp dữ liệu có quyền sử dụng và các bundles feature/model/scaler/threshold/scores cùng provenance theo APIs trong `src/stock_monitor`. Artifacts private không nằm trong GitHub này.
-
-```powershell
-.venv/Scripts/python.exe -m streamlit run app.py --server.address 127.0.0.1
-```
-
-Với một clone mới chưa có bundles, ứng dụng sẽ báo thiếu dữ liệu/model; đây là trạng thái dự kiến, không phải demo hoàn chỉnh. Không tự tải hoặc tự huấn luyện khi rerun giao diện. `configs/default.yaml` là ví dụ strict: xác nhận nguồn vẫn pending, các đường dẫn raw/calendar/evidence là đầu vào cần được cung cấp độc lập, không phải tài nguyên đính kèm.
-
-## Phương pháp
-
-Raw 1 phút → kiểm chất lượng → nến 5 phút → bốn feature nhân quả → cửa sổ sáu nến → score → ngưỡng validation → cảnh báo.
-
-- Features: log return, range ratio, body ratio và volume surprise so với các phiên trước cùng khung giờ.
-- Model/scaler fit train; threshold phân vị 98% validation theo mã. Không tune trên test.
-- LSTM Autoencoder: học tái tạo cửa sổ 6×4; score là MSE bốn feature tại nến cuối.
-- Replay chỉ cho thấy dữ liệu đến thời điểm T; không coi replay là live.
-- Incremental xử lý idempotence/revision, raw bất biến, nến đã đóng, gaps/stale và khóa artifact; retry hữu hạn, fail-closed khi không đủ điều kiện.
-
-Ngưỡng 98% **không phải độ chính xác 98%**. Cảnh báo không phải khuyến nghị mua/bán, bằng chứng thao túng hoặc cam kết sinh lợi. LSTM không mặc nhiên tốt hơn baseline. Nhãn AI-assisted hoặc benchmark synthetic không thay thế ground truth chuyên gia và đánh giá thị trường độc lập.
-
-## Cấu trúc
-
-```text
-app.py                 Giao diện Streamlit
-app_upgrade.py         Dashboard demo v2 với dữ liệu tổng hợp đi kèm
-src/stock_monitor/     Dữ liệu, feature, model, scoring, replay, realtime guards
-tests/                 Nhóm tests độc lập của bản public
-scripts/               Kiểm tra fixture và manifest
-demo/                  Fixture tổng hợp + manifest phân phối
-demo/upgrade_ui/        Dữ liệu và calibration cho dashboard v2
-configs/default.yaml   Cấu hình strict mẫu, không có chứng nhận nguồn
-```
-
-Không commit `.env`, secrets, dữ liệu thực, model, logs hoặc trạng thái cá nhân. Việc public mã nguồn không đồng nghĩa cấp quyền sử dụng/thu thập/phân phối dữ liệu của bên thứ ba.
+Mã xử lý nằm trong `src/stock_monitor/`, giao diện trong `web/research-workbench-replay/public/`, dữ liệu giả lập trong `demo/upgrade_ui/`. Bản public không chứa dữ liệu thật, trọng số đã huấn luyện, báo cáo phiên, nhật ký cá nhân hoặc thông tin đăng nhập. Repo chưa có giấy phép mã nguồn riêng.
