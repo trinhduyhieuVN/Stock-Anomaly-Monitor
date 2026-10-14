@@ -2,57 +2,86 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="color-scheme" content="dark"><title>Stock Monitor — Bàn nghiên cứu</title>
-  <link rel="stylesheet" href="/style.css"><script defer src="/app.js"></script>
+  <meta name="color-scheme" content="light"><title>Stock Monitor — Replay</title>
+  <link rel="stylesheet" href="/style.css"><script defer src="/ui-copy.js"></script><script defer src="/app.js"></script>
 </head>
-<body>
+<body class="replay-wide">
 <a class="skip" href="#chart-heading">Đến biểu đồ</a>
-<header class="topbar"><a class="brand" href="/">Stock<span class="brand-light">Monitor</span></a><span class="workspace-name">Bàn nghiên cứu</span></header>
-<div class="sourcebar"><span id="source-status" role="status">Đang kiểm tra dữ liệu…</span><span class="source-date">UTC+7</span></div>
-<div class="controls">
-  <label>Nguồn<select id="source"><option value="synthetic">Giả lập v2</option><option value="historical">Lịch sử thật · local</option></select></label>
-  <label>Phiên<select id="session"></select></label>
-  <label>Phương pháp<select id="model"></select></label>
-</div>
-<main id="workbench" aria-busy="true">
-  <p id="loading" role="status">Đang kiểm tra nến…</p>
-  <div id="error" role="alert" hidden><h2>Chưa tải được dữ liệu</h2><p id="error-copy"></p><button id="retry">Tải lại</button></div>
-  <div class="workbench" id="content" hidden>
-    <nav class="watchlist" aria-label="Danh sách mã">
-      <div class="rail-heading"><h2>Theo dõi</h2><span id="symbol-count"></span></div>
-      <label class="sr-only" for="search">Tìm mã</label><input id="search" type="search" placeholder="Tìm mã…" autocomplete="off">
-      <div id="symbols"></div><p id="no-symbols" class="empty" hidden>Không có mã phù hợp.</p>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Điều hướng ứng dụng">
+    <a class="brand" href="/" aria-label="Stock Monitor, về đầu phiên"><svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="10"/><path d="M8 24V12l10 9 10-9v12"/><circle cx="28" cy="9" r="2"/></svg><span>Stock Monitor</span></a>
+    <div class="session-panel"><span>Phiên đang xem</span><strong id="session-date">Chưa chọn phiên</strong><span id="session-clock">Nến 5 phút · Replay</span></div>
+    <nav class="main-nav" aria-label="Nội dung nghiên cứu">
+      <a href="/monitor"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg>Theo dõi</a>
+      <a id="nav-overview" href="#chart-heading" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Replay</a>
+      <a id="nav-signals" href="#events-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg>Tín hiệu mô hình</a>
     </nav>
-    <section class="chart-panel" aria-labelledby="chart-heading">
-      <div class="instrument-head"><div><h1 id="chart-heading" tabindex="-1">FPT</h1><p id="instrument-name"></p></div><div class="last-price"><strong id="last-price"></strong><span id="day-change"></span></div></div>
-      <div class="chart-toolbar"><span id="known-time"></span><span id="unit" class="unit"></span></div>
-      <div id="chart" class="chart" role="group" aria-label="Biểu đồ nến và khối lượng"></div>
-      <div class="chart-legend"><span><i class="up-dot"></i>Tăng</span><span><i class="down-dot"></i>Giảm</span><span><i class="attention-dot"></i><span id="mark-label">Biến động quan sát</span></span><span>Khoảng trống = nghỉ phiên / thiếu nến</span></div>
-      <a class="mobile-detail-link" id="read-selection" href="#selection-time">Đọc nến đang chọn</a>
-      <div class="replay" id="replay-controls">
-        <div class="replay-heading"><h2>Replay</h2><button id="full" class="quiet">Xem cả phiên</button></div>
-        <div class="replay-controls"><button id="back" class="square" aria-label="Lùi một nến"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button><button id="play" class="primary">Phát Replay</button><button id="next" class="square" aria-label="Tiến một nến"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button><label class="sr-only" for="timeline">Phần đã biết</label><input id="timeline" type="range" min="1" max="48" value="48"><output id="bar-count" for="timeline"></output></div>
+    <div id="sidebar-watchlist-host">
+      <section id="watchlist" class="watchlist" aria-labelledby="watchlist-heading" hidden>
+        <div class="rail-heading"><h1 id="watchlist-heading">Cổ phiếu theo dõi</h1><span id="symbol-count"></span></div>
+        <div id="symbols" role="group" aria-label="Danh sách mã cổ phiếu" tabindex="0"></div><p id="no-symbols" class="empty" hidden>Không có mã phù hợp. Xóa nội dung tìm kiếm để xem lại.</p>
+        <p id="quote-status" class="quote-status" role="status"></p>
+      </section>
+    </div>
+    <div class="sidebar-bottom"><span class="local-dot" aria-hidden="true"></span>Chỉ trên máy này</div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span class="sr-only">Tìm mã cổ phiếu</span><input id="search" type="search" placeholder="Tìm FPT, HPG, VCB…" autocomplete="off"></label>
+      <span class="workspace-name">Replay</span>
+    </header>
+    <div class="controls">
+      <label>Nguồn dữ liệu<select id="source"><option value="synthetic">Dữ liệu giả lập</option><option value="historical">Dữ liệu lịch sử</option><option value="watchlist">Lịch sử 5 mã · GRU6</option></select></label>
+      <label>Phiên<select id="session"></select></label>
+      <label>Mô hình<select id="model"></select></label>
+    </div>
+    <div class="sourcebar"><span id="source-status" role="status">Đang kiểm tra dữ liệu…</span><span class="source-date">UTC+7</span></div>
+    <main id="workbench" aria-busy="true">
+      <p id="loading" role="status">Đang kiểm tra nến…</p>
+      <div id="error" role="alert" hidden><h2>Chưa tải được dữ liệu</h2><p id="error-copy"></p><button id="retry">Tải lại</button></div>
+      <div id="content" hidden>
+        <div class="workbench">
+          <section class="chart-panel" aria-labelledby="chart-heading">
+            <div class="instrument-head"><div class="instrument-identity"><img id="company-logo" class="company-logo" src="/logos/FPT.svg" width="64" height="36" alt="Logo Tập đoàn FPT"><div><h2 id="chart-heading" tabindex="-1">FPT</h2><p id="instrument-name"></p></div></div><div class="last-price"><strong id="last-price"></strong><span id="day-change"></span></div></div>
+            <div class="chart-toolbar"><div class="chart-types" role="group" aria-label="Loại biểu đồ"><button id="chart-line" class="quiet" aria-pressed="false">Đường giá</button><button id="chart-candles" class="quiet" aria-pressed="true">Nến</button></div><button id="chart-expand" class="quiet chart-expand" data-chart-expand aria-pressed="false">Mở rộng biểu đồ</button><span id="known-time"></span></div>
+            <div class="zoom-toolbar"><div class="zoom-controls" role="group" aria-label="Phạm vi biểu đồ"><button id="zoom-12" class="quiet" aria-pressed="false">12 nến</button><button id="zoom-24" class="quiet" aria-pressed="false">24 nến</button><button id="zoom-all" class="quiet" aria-pressed="true">Cả phiên</button></div><span id="chart-range"></span></div>
+            <div id="chart" class="chart" role="group" aria-label="Biểu đồ giá và khối lượng"><div id="chart-tooltip" class="chart-tooltip" hidden></div></div>
+            <div class="chart-legend"><span id="candle-legend"><i class="up-dot"></i>Tăng <i class="down-dot"></i>Giảm</span><span id="line-legend" hidden><i class="up-dot"></i>Tăng <i class="down-dot"></i>Giảm · giá đóng cửa</span><span><i class="attention-dot"></i><span id="mark-label">Điểm nổi bật</span></span><span id="unit" class="unit"></span><span>Đường ngắt = nghỉ phiên / thiếu nến</span></div>
+            <a class="mobile-detail-link" id="read-selection" href="#selection-time">Đọc nến đang chọn</a>
+            <div class="replay" id="replay-controls">
+              <div class="replay-heading"><h3>Replay</h3><button id="full" class="quiet">Xem cả phiên</button></div>
+              <div class="replay-controls"><button id="back" class="square" aria-label="Lùi một nến"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg></button><button id="play" class="primary">Phát Replay</button><button id="next" class="square" aria-label="Tiến một nến"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg></button><label class="sr-only" for="timeline">Phần đã biết</label><input id="timeline" type="range" min="1" max="48" value="48"><output id="bar-count" for="timeline"></output></div>
+            </div>
+            <div class="event-tabs" role="group" aria-label="Nội dung đánh dấu"><button id="observations-tab" class="quiet" aria-pressed="true">Biến động quan sát</button><button id="models-tab" class="quiet" aria-pressed="false">Tín hiệu mô hình</button></div>
+            <p id="rule-copy" class="rule-copy">Giá đổi ≥ 0,6% hoặc khối lượng ≥ 2× trung vị tối đa 12 nến trước. Quy tắc quan sát, không phải tín hiệu mô hình.</p>
+            <div class="events-heading"><h3 id="events-title">Biến động quan sát</h3><label class="sr-only" for="event-filter">Lọc sự kiện</label><select id="event-filter"><option value="all">Tất cả loại</option><option value="price">Biến động giá</option><option value="volume">Khối lượng tăng</option></select></div>
+            <p id="model-overview" class="rule-copy" role="status" hidden></p><div id="events" tabindex="0" aria-label="Danh sách kết quả theo thời điểm đang xem"></div><p id="no-events" class="empty" hidden>Không có điểm theo bộ lọc này.</p><button id="model-retry-inline" class="quiet" hidden>Thử lại mô hình</button>
+            <div class="exports"><a id="export-bars" href="#">Nến CSV</a><a id="export-events" href="#">Sự kiện CSV</a></div>
+          </section>
+          <div id="mobile-watchlist-host"></div>
+          <aside class="inspector" aria-labelledby="inspector-heading">
+            <div class="inspector-head"><h2 id="inspector-heading">Nến đang chọn</h2><span id="selection-time" tabindex="-1"></span></div>
+            <span id="selection-kind" class="selection-kind"></span>
+            <div class="analysis-columns">
+              <div class="model-analysis">
+            <section class="model-result-panel" aria-labelledby="model-result-heading"><h3 id="model-result-heading">Tín hiệu mô hình</h3><strong id="model-result">Chưa có kết quả</strong><p id="model-status" role="status"></p><dl class="detail-list"><div><dt>Điểm mô hình</dt><dd id="score"></dd></div><div><dt>Ngưỡng</dt><dd id="threshold"></dd></div></dl><button id="retry-model" class="quiet" hidden>Thử lại mô hình</button></section>
+            <details id="method-info"><summary>Chi tiết mô hình</summary><p id="model-explanation"></p><div id="method-copy"></div><div id="data-copy"></div></details>
+            <details id="forecast-info"><summary>Diễn biến sau nến</summary><p id="forecast-basis"></p><div id="forecasts"></div></details>
+            <details id="version-info" hidden><summary>Ban đầu &amp; cập nhật</summary><div id="event-versions"></div></details>
+              </div>
+              <div class="bar-analysis">
+            <h3 id="explanation-title">Diễn biến nến</h3><div id="description"></div>
+            <dl class="ohlc"><div><dt>Mở</dt><dd id="open"></dd></div><div><dt>Cao</dt><dd id="high"></dd></div><div><dt>Thấp</dt><dd id="low"></dd></div><div><dt>Đóng</dt><dd id="close"></dd></div></dl>
+            <dl class="detail-list"><div><dt>Khối lượng</dt><dd id="volume"></dd></div><div><dt>So với nến trước</dt><dd id="return"></dd></div><div><dt>So với nền khối lượng</dt><dd id="volume-ratio"></dd></div></dl>
+            <div class="selection-controls"><button id="select-prev" class="quiet">Nến trước</button><button id="select-next" class="quiet">Nến sau</button></div>
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
-      <div class="event-tabs" role="group" aria-label="Nội dung đánh dấu"><button id="observations-tab" class="quiet" aria-pressed="true">Biến động quan sát</button><button id="models-tab" class="quiet" aria-pressed="false">Tín hiệu mô hình</button></div><p id="rule-copy" class="rule-copy">Giá đổi ≥ 0,6% hoặc volume ≥ 2× trung vị tối đa 12 nến trước. Quy tắc mô tả, không phải kết quả AI.</p><div class="events-heading"><h2 id="events-title">Biến động quan sát</h2><label class="sr-only" for="event-filter">Lọc sự kiện</label><select id="event-filter"><option value="all">Tất cả loại</option><option value="price">Biến động giá</option><option value="volume">Khối lượng tăng</option></select></div>
-      <p id="model-overview" class="rule-copy" role="status" hidden></p><div id="events"></div><p id="no-events" class="empty" hidden>Không có điểm theo bộ lọc này.</p><button id="model-retry-inline" class="quiet" hidden>Thử lại mô hình</button>
-      <div class="exports"><a id="export-bars" href="#">Nến CSV</a><a id="export-events" href="#">Sự kiện CSV</a><a id="export-reviews" href="#">Nhận xét CSV</a></div>
-    </section>
-    <aside class="inspector" aria-labelledby="inspector-heading">
-      <div class="inspector-head"><h2 id="inspector-heading">Nến đang chọn</h2><span id="selection-time" tabindex="-1"></span></div>
-      <span id="selection-kind" class="selection-kind"></span>
-      <h3 id="explanation-title">Diễn biến nến</h3><div id="description"></div>
-      <dl class="ohlc"><div><dt>Mở</dt><dd id="open"></dd></div><div><dt>Cao</dt><dd id="high"></dd></div><div><dt>Thấp</dt><dd id="low"></dd></div><div><dt>Đóng</dt><dd id="close"></dd></div></dl>
-      <dl class="detail-list"><div><dt>Khối lượng</dt><dd id="volume"></dd></div><div><dt>So với nến trước</dt><dd id="return"></dd></div><div><dt>So với nền volume</dt><dd id="volume-ratio"></dd></div></dl>
-      <div class="selection-controls"><button id="select-prev" class="quiet">Nến trước</button><button id="select-next" class="quiet">Nến sau</button></div>
-      <details id="method-info"><summary>Phương pháp &amp; dữ liệu</summary><p id="model-status" role="status"></p><button id="retry-model" class="quiet" hidden>Thử lại mô hình</button><div id="method-copy"></div><dl class="detail-list"><div><dt>Score</dt><dd id="score"></dd></div><div><dt>Ngưỡng</dt><dd id="threshold"></dd></div></dl><div id="data-copy"></div></details>
-      <details id="forecast-info"><summary>Diễn biến sau nến</summary><p id="forecast-basis"></p><div id="forecasts"></div></details>
-      <details id="version-info" hidden><summary>Ban đầu &amp; cập nhật</summary><div id="event-versions"></div></details>
-      <details id="review-section"><summary>Ghi nhận xét</summary><p id="review-status" role="status"></p>
-        <form id="review-form"><label>Người đánh giá<input id="reviewer" maxlength="256" required autocomplete="name"></label><label>Loại đánh giá<select id="reviewer-kind"><option value="human">Người dùng</option><option value="ai_assisted">Có AI hỗ trợ</option></select></label><label>Kết luận<select id="review-label"><option value="uncertain">Chưa rõ</option><option value="noteworthy">Đáng chú ý</option><option value="ordinary">Bình thường</option><option value="data_issue">Lỗi dữ liệu</option></select></label><label>Lý do<textarea id="review-reason" maxlength="2000" rows="3" required></textarea></label><button class="primary" id="save-review" type="submit">Lưu nhận xét</button></form><div id="reviews"></div>
-      </details>
-    </aside>
+    </main>
   </div>
-</main>
+</div>
 <noscript><p class="fatal">Cần bật JavaScript để xem biểu đồ.</p></noscript>
 </body>
 </html>

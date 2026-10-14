@@ -122,6 +122,14 @@ def test_artifact_preflight_blocks_before_poll(tmp_path):
     assert called == []
 
 
+def test_invalid_wire_payload_records_the_request_but_never_scores(tmp_path):
+    values=kwargs(tmp_path,lambda *_: PollPayload(b'{}','2026-10-01T02:16:10Z'))
+    result=run_bounded_poll_cycle(**values)
+    assert result.state=='BLOCKED_DATA_CONTRACT'
+    assert len(result.attempts)==1 and result.attempts[0]['request_started']
+    assert result.attempts[0]['attempt']==1 and result.score_result is None
+
+
 def test_ready_cycle_calls_supplied_scorer_and_labels_offline(tmp_path):
     values = kwargs(tmp_path, lambda *_: PollPayload(raw_poll(), "2026-10-01T02:16:10Z"))
     status = {"state": "READY", "scoring_allowed": True, "gap_count": 0}

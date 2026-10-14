@@ -105,6 +105,7 @@ def run_bounded_poll_cycle(store_root, cycle_id: str, symbols, *, poll_once: Cal
     for symbol in symbols:
         poll_id = f"{cycle_id}-{symbol}"
         for attempt in range(1, max_attempts + 1):
+            requested = False
             try:
                 # Recheck on every retry: a failed pointer swap may already have
                 # persisted an immutable receipt during this very cycle.
@@ -118,6 +119,7 @@ def run_bounded_poll_cycle(store_root, cycle_id: str, symbols, *, poll_once: Cal
                                      "already_applied": bool(stored.report["already_applied"])})
                     reused = True
                     break
+                requested = True
                 payload = poll_once(symbol, attempt)
                 if not isinstance(payload, PollPayload):
                     raise DataContractError("poll_once must return PollPayload")
@@ -145,7 +147,10 @@ def run_bounded_poll_cycle(store_root, cycle_id: str, symbols, *, poll_once: Cal
                 sleep(delay)
                 waited += delay
                 continue
-            except DataContractError:
+            except (DataContractError, ValueError, KeyError, TypeError):
+                if requested:
+                    attempts.append({"symbol": symbol, "attempt": attempt,
+                                     "outcome": "data_contract_error", "request_started": True})
                 return _cycle_result("BLOCKED_DATA_CONTRACT", "Poll payload or store contract failed.",
                                      attempts, waited, stores, live_evidence=False)
             except Exception as exc:  # Provider/transport implementation remains caller-owned.

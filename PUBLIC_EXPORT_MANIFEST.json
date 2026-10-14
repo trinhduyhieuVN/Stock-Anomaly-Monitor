@@ -17,8 +17,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "b7256946d6ca9c75c0b2e24d6a7edb34a136619660ae021a562b7154a7a164b1",
-      "bytes": 2872
+      "sha256": "f41f9c0735983581b7ca8b8f65d03611ea5493ab1d097aa4cbced8125c97fd7a",
+      "bytes": 4018
     },
     {
       "path": "app.py",
@@ -87,8 +87,8 @@
     },
     {
       "path": "docs/huong_dan_demo_local.md",
-      "sha256": "5b19c7edec25eca88368b3135fc4a7ef3a2649f8e7b5aadd7ada4e8b0034220e",
-      "bytes": 2612
+      "sha256": "bfeb5e5c97f97090a61a176bebfb51c04f979d51823f3c0aeb55fb88fb8951d9",
+      "bytes": 4139
     },
     {
       "path": "pyproject.toml",
@@ -201,14 +201,19 @@
       "bytes": 1638
     },
     {
+      "path": "src/stock_monitor/near_realtime.py",
+      "sha256": "00ada2d34628c158fb8676c033f9e81329bdf79928a789bfd4776dd4bfd55f43",
+      "bytes": 17655
+    },
+    {
       "path": "src/stock_monitor/pipeline.py",
       "sha256": "f93062fabbcb056567ae40d9d672c128cd2eb987bf7625a123244d2e15bcc604",
       "bytes": 41986
     },
     {
       "path": "src/stock_monitor/polling.py",
-      "sha256": "af9e742a5be8d59600f389ac378797165379a3d3d8253230b16ed242a531fe49",
-      "bytes": 11115
+      "sha256": "6a416418895924664b83379e97a3f7b3b8105aa78fb3aa9a3af8cc5910fdd516",
+      "bytes": 11415
     },
     {
       "path": "src/stock_monitor/providers.py",
@@ -281,6 +286,11 @@
       "bytes": 11711
     },
     {
+      "path": "src/stock_monitor/research/history_acquisition.py",
+      "sha256": "230265595dc1bd0e064a0b4740d058a08b4a249448a11fdd9231d56044d6df6b",
+      "bytes": 9988
+    },
+    {
       "path": "src/stock_monitor/research/history_review.py",
       "sha256": "67f558f69b94a55ed6794900fe081e5404c59f4b9453d689f26b6f35c05e8f9a",
       "bytes": 2849
@@ -316,9 +326,49 @@
       "bytes": 9325
     },
     {
+      "path": "src/stock_monitor/research/receipt_monitor.py",
+      "sha256": "4fcf5bb787f2c85e9d4f78a55f3f8a36680daf82068c4ff92333d60c6c7cee85",
+      "bytes": 21654
+    },
+    {
+      "path": "src/stock_monitor/research/short_alerts.py",
+      "sha256": "b92c8449dc76234a997bcfc8d306f75ec4194f48c3b2cb601116f497256bea96",
+      "bytes": 17281
+    },
+    {
+      "path": "src/stock_monitor/research/short_context.py",
+      "sha256": "e9234f7511feb613d0f9ee5820a8e3d8238d469885ccf9974be191f86aec5ed4",
+      "bytes": 3894
+    },
+    {
+      "path": "src/stock_monitor/research/short_history.py",
+      "sha256": "369657f06e3cf2070b099880490963772d5782f05f6c755e8e0ac12c2667db96",
+      "bytes": 12702
+    },
+    {
+      "path": "src/stock_monitor/research/short_monitor.py",
+      "sha256": "7bc44e3cc154be541feda85ced3b6e9b21c3a18366fa21c3c6681fdd55218171",
+      "bytes": 13415
+    },
+    {
+      "path": "src/stock_monitor/research/short_ui.py",
+      "sha256": "080134f2c4f92766099a1a89d5fd4a72fb0bd217e49190037a418c7306371a98",
+      "bytes": 12604
+    },
+    {
       "path": "src/stock_monitor/research/theme.py",
       "sha256": "7471010ac4673a53f3f936828ab77f822a6b5fad8072e408dc487c57ca8b3c87",
       "bytes": 1352
+    },
+    {
+      "path": "src/stock_monitor/research/watchlist_history.py",
+      "sha256": "37f96d56de0d48989f98301e9564fae524bfcd355e3d239c12b28976548ec105",
+      "bytes": 9013
+    },
+    {
+      "path": "src/stock_monitor/research/watchlist_model.py",
+      "sha256": "7b48729a6efee8e7b2d64d97d78ca33e11cdfd28e1235073a973de431f384dea",
+      "bytes": 5424
     },
     {
       "path": "src/stock_monitor/scoring.py",
@@ -441,6 +491,11 @@
       "bytes": 1012
     },
     {
+      "path": "src/stock_monitor/workbench/extra_prices.py",
+      "sha256": "be229a313da915ab4744534449485c238d48f149428648cb99b0655bbd3992f7",
+      "bytes": 6130
+    },
+    {
       "path": "src/stock_monitor/workbench/http.py",
       "sha256": "6c3fc7c71d2ea93b3deba80abb6090b23005c191af4554eb6bbea795a5d1a491",
       "bytes": 5474
@@ -452,8 +507,18 @@
     },
     {
       "path": "src/stock_monitor/workbench/smooth.py",
-      "sha256": "33c8df424e6f3fa3c36f12f0a633085f1819c2421b6165cd2425c8a1a0396240",
-      "bytes": 5614
+      "sha256": "f3c76fa8d56987ccf86646923b378f182b2b5e851e25fef8a6f8ac42cba736a2",
+      "bytes": 11176
+    },
+    {
+      "path": "src/stock_monitor/workbench/watchlist.py",
+      "sha256": "55dcfff853052f3fdfce84fa17c2b881269de7cf37fcae5138e0d2a68542060e",
+      "bytes": 7134
+    },
+    {
+      "path": "src/stock_monitor/workbench/waves.py",
+      "sha256": "46e0fb0efc1eedef6c7ad2877340999318066bc6164210090c06d6a12f64f558",
+      "bytes": 1335
     },
     {
       "path": "tests/test_atomic_access.py",
@@ -517,8 +582,8 @@
     },
     {
       "path": "tests/test_polling.py",
-      "sha256": "d0f5f21b280e51606610ee0535cb9f3f6df75cb82d41ded9f4706402827000a4",
-      "bytes": 13566
+      "sha256": "c2aff8448bdca7895258c0f6ca5898283cdbca66a63bcebc72b466f05df56009",
+      "bytes": 13973
     },
     {
       "path": "tests/test_public_replay_demo.py",
@@ -572,18 +637,33 @@
     },
     {
       "path": "web/research-workbench-replay/public/app.js",
-      "sha256": "a034a1a2929164da8b99a072cdcfed79e80779c25362329fc899e99eab50b2ab",
-      "bytes": 29769
+      "sha256": "80cb66cc724002d972dfe48939ca720f75d9fbb30abf70ec664b08dc4bc8c785",
+      "bytes": 42841
     },
     {
       "path": "web/research-workbench-replay/public/index.html",
-      "sha256": "9a8a62ccd13fec0f2aeb1e1bc1a4b4f5b60ff936470cff2e5f3774aa7d8c9b9d",
-      "bytes": 7185
+      "sha256": "27b267b2c1a8732d386dd02081f91be022eae128308ef72c8d22b4521c1efd9c",
+      "bytes": 10057
+    },
+    {
+      "path": "web/research-workbench-replay/public/monitor.html",
+      "sha256": "58b3f14dea5c9e93f8af5410eb13102daf25cfdedf7d19257e8a676b54fec5f0",
+      "bytes": 6365
+    },
+    {
+      "path": "web/research-workbench-replay/public/monitor.js",
+      "sha256": "35e6e3ceeda9fb2c43c6ed08a18cb3eb07f823f9dbf8f1eaf3f52e7a3dfd6f16",
+      "bytes": 11752
     },
     {
       "path": "web/research-workbench-replay/public/style.css",
-      "sha256": "103a9eb41cf0b72cca7f7e5f0789c3846763892f7e7931c017584e351339bbb4",
-      "bytes": 11032
+      "sha256": "7f5c461c804e0b0b4a46bc20851f6418570af8a0d78034109f8729edec19b47f",
+      "bytes": 21125
+    },
+    {
+      "path": "web/research-workbench-replay/public/ui-copy.js",
+      "sha256": "c4b382a8af1b8cd533cdbe22e55a4970577f7ce25156b5efc55b87e2681029c0",
+      "bytes": 7069
     }
   ],
   "excluded": [

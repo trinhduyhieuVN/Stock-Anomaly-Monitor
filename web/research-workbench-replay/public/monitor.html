@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light"><title>Stock Monitor — Theo dõi</title>
+  <link rel="stylesheet" href="/style.css"><script defer src="/ui-copy.js"></script><script defer src="/monitor.js"></script>
+</head>
+<body>
+<a class="skip" href="#monitor-heading">Đến phần theo dõi</a>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Điều hướng ứng dụng">
+    <a class="brand" href="/"><svg class="brand-mark" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="10"/><path d="M8 24V12l10 9 10-9v12"/><circle cx="28" cy="9" r="2"/></svg><span>Stock Monitor</span></a>
+    <div class="session-panel"><span>Nguồn dữ liệu</span><strong id="monitor-mode">Chưa có dữ liệu</strong><span>Nến 5 phút đã đóng</span></div>
+    <nav class="main-nav" aria-label="Nội dung nghiên cứu">
+      <a href="/monitor" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg>Theo dõi</a>
+      <a href="/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 10 7-10 7Z"/></svg>Replay</a>
+    </nav>
+    <div class="sidebar-bottom"><span class="local-dot" aria-hidden="true"></span>Chỉ trên máy này</div>
+  </aside>
+  <main class="workspace">
+    <header class="topbar monitor-topbar"><h1 id="monitor-heading" tabindex="-1">Theo dõi</h1><label class="monitor-model-choice" for="monitor-model">Mô hình<select id="monitor-model"><option value="full">GRU12 · điểm / đoạn</option><option value="gru6">GRU6 · thử nghiệm từng nến</option></select></label><button id="refresh-monitor" class="quiet">Làm mới</button></header>
+    <div class="sourcebar"><span id="monitor-source-status" role="status">Đang kiểm tra dữ liệu…</span><span class="source-date">UTC+7</span></div>
+    <div class="monitor-content">
+      <section class="monitor-state" aria-labelledby="state-heading"><div><h2 id="state-heading">Đang đọc trạng thái</h2><p id="state-message" role="status">Mở trang không tự khởi chạy nguồn dữ liệu.</p></div><span id="poll-count"></span></section>
+      <div class="workbench">
+        <section class="chart-panel" aria-labelledby="monitor-symbol">
+          <div class="instrument-head"><div class="instrument-identity"><img id="monitor-logo" class="company-logo" src="/logos/FPT.svg" width="72" height="44" alt="" hidden><div><h2 id="monitor-symbol">Chưa có mã</h2><p id="monitor-day"></p></div></div><div class="last-price"><strong id="monitor-price">Chưa có giá</strong><span id="monitor-change"></span></div></div>
+          <div class="chart-toolbar"><div class="chart-types" role="group" aria-label="Loại biểu đồ"><button id="monitor-line" aria-pressed="true">Đường giá</button><button id="monitor-candles" aria-pressed="false">Nến</button></div><button id="monitor-expand" class="quiet chart-expand" data-chart-expand aria-pressed="false">Mở rộng biểu đồ</button><span id="monitor-bar-count">Chưa có nến</span></div>
+          <div id="monitor-chart" class="chart" role="group" aria-label="Giá và khối lượng đã nhận"><svg id="monitor-svg" viewBox="0 0 900 360" role="img" aria-label="Biểu đồ nến 5 phút đã nhận"><defs><linearGradient id="monitor-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#146f64" stop-opacity=".12"/><stop offset="1" stop-color="#146f64" stop-opacity="0"/></linearGradient></defs><g id="monitor-grid"></g><g id="monitor-area-layer"></g><g id="monitor-price-layer"></g><g id="monitor-volume-layer"></g><g id="monitor-axis"></g></svg></div>
+          <p id="monitor-empty" class="empty">Chưa có nến đã đóng để hiển thị.</p>
+          <div class="chart-legend"><span><i class="up-dot"></i>Tăng</span><span><i class="down-dot"></i>Giảm</span><span>Đường ngắt = nghỉ phiên / thiếu nến</span></div>
+          <h3 class="monitor-results-heading">Tín hiệu mô hình</h3><p id="monitor-model-rule" class="rule-copy">GRU12 · phân biệt nến đơn lẻ và đoạn liên tiếp.</p>
+          <div id="monitor-table-wrap" class="monitor-table-wrap" tabindex="0" aria-label="Kết quả ban đầu theo nến" hidden><table class="monitor-table"><thead><tr><th>Nến</th><th>Kết quả ban đầu</th><th>Điểm / ngưỡng</th><th>Chấm ban đầu lúc</th></tr></thead><tbody id="monitor-events"></tbody></table></div>
+          <p id="monitor-events-empty" class="empty">Chưa có kết quả cho mô hình này.</p>
+        </section>
+        <aside class="inspector" aria-labelledby="monitor-data-heading">
+          <h2 id="monitor-data-heading">Trạng thái dữ liệu</h2>
+          <dl class="detail-list monitor-details"><div><dt>Nến mới nhất</dt><dd id="monitor-latest">Chưa có</dd></div><div><dt>Nhận dữ liệu</dt><dd id="monitor-received">Chưa có</dd></div><div><dt>Xử lý gần nhất</dt><dd id="monitor-scored">Chưa chấm</dd></div><div><dt>Thời gian xử lý</dt><dd id="monitor-duration">Chưa đo</dd></div><div><dt>Nến thiếu</dt><dd id="monitor-gaps">Chưa kiểm tra</dd></div></dl>
+          <details id="monitor-verification" class="monitor-run-help"><summary>Chi tiết dữ liệu</summary><dl class="detail-list monitor-details"><div><dt>Nhận → chấm xong</dt><dd id="monitor-latency">Chưa đo</dd></div><div><dt>Độ trễ nguồn</dt><dd id="monitor-delay">Chưa đo</dd></div><div><dt>Tệp mô hình</dt><dd id="monitor-artifact">Chưa kiểm tra</dd></div><div><dt>Quyền nguồn</dt><dd>Chưa xác nhận · chỉ trên máy này</dd></div></dl><p>Điểm mô hình không phải xác suất hay khuyến nghị giao dịch. Thiếu điểm không được coi là bình thường.</p><p>Trang này chỉ đọc kết quả; không khởi chạy nguồn hoặc huấn luyện mô hình.</p></details>
+          <details id="monitor-forecast-info" class="monitor-run-help"><summary>Dự báo ngắn hạn</summary><div id="monitor-forecasts"><p>Chưa có dự báo cho nến này.</p></div></details>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+<noscript><p class="fatal">Cần bật JavaScript để đọc trạng thái.</p></noscript>
+</body>
+</html>
